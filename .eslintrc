@@ -1,0 +1,36 @@
+{
+    "env": {
+        "browser": false,
+        "es6": true,
+        "node": true
+    },
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "project": "tsconfig.json",
+        "sourceType": "module",
+        "ecmaVersion": 2020
+    },
+    "plugins": ["@typescript-eslint", "jest", "simple-import-sort", "import"],
+    "extends": [
+        "eslint:recommended",
+        "plugin:import/typescript",
+        "plugin:jest/recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:eslint-comments/recommended",
+        "standard-with-typescript",
+        "prettier"
+    ],
+    "rules": {
+        "simple-import-sort/imports": "warn",
+        "simple-import-sort/exports": "warn",
+        "import/resolver": {
+            "typescript": {
+                "alwaysTryTypes": true,
+                "project": "./tsconfig.json"
+            }
+        },
+        "import/extensions": {
+            "extensions": [".js", ".jsx"]
+        }
+    }
+}
