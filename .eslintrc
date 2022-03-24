@@ -15,15 +15,20 @@
         "eslint:recommended",
         "plugin:@typescript-eslint/eslint-recommended",
         "plugin:@typescript-eslint/recommended",
-        "plugin:node/recommended",
         "plugin:jest/recommended",
         "airbnb-base",
         "airbnb-typescript/base",
         "prettier"
     ],
-    "settings": {},
+    "settings": {
+        "@typescript-eslint/consistent-type-imports": {
+            "prefer": "type-imports",
+            "disallowTypeAnnotations": true
+        }
+    },
     "rules": {
         "no-console": "off",
-        "no-restricted-syntax": "off"
+        "no-restricted-syntax": "off",
+        "@typescript-eslint/consistent-type-imports": "error"
     }
 }
