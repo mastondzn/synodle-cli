@@ -19,6 +19,7 @@
     },
     "license": "MIT",
     "devDependencies": {
+        "@types/inquirer": "^8.2.0",
         "@types/jest": "^27.4.1",
         "@types/node": "^17.0.22",
         "@typescript-eslint/eslint-plugin": "^4.0.1",
@@ -44,7 +45,7 @@
         "start": "node --experimental-specifier-resolution=node --loader ts-node/esm --no-warnings src/main.ts",
         "start:r": "nodemon --watch './**/*.ts' --exec 'node --experimental-specifier-resolution=node --loader ts-node/esm --no-warnings' src/main.ts",
         "start:prod": "node ./build/src/main.js",
-        "playground": "ts-node-dev ./src/playground/playground.ts",
+        "playground": "node --experimental-specifier-resolution=node --loader ts-node/esm --no-warnings src/playground/playground.ts",
         "build": "tsc -p tsconfig.json",
         "test": "jest --verbose --watchAll",
         "coverage": "jest --coverage",
@@ -61,6 +62,10 @@
         "node": "16.13.0"
     },
     "dependencies": {
-        "chalk": "^5.0.1"
+        "@discordjs/collection": "^0.5.0",
+        "chalk": "^5.0.1",
+        "got": "^12.0.2",
+        "inquirer": "^8.2.1",
+        "puppeteer": "^13.5.1"
     }
 }
