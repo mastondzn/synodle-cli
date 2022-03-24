@@ -12,6 +12,7 @@
             "preLaunchTask": "yarn: build",
             "outFiles": ["${workspaceFolder}/build/**/*.js"],
             "smartStep": true,
+            "console": "integratedTerminal",
             "resolveSourceMapLocations": [
                 "${workspaceFolder}/**",
                 "!**/node_modules/**"
