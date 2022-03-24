@@ -29,3 +29,6 @@ build/
 
 # playground
 src/playground
+
+# user data
+data/user
