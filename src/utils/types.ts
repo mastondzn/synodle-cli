@@ -28,10 +28,6 @@ export type Letter =
 
 export type Color = 'grey' | 'green' | 'yellow';
 
-export type SuccessState =
-    | { success: true }
-    | { success: false; reason: string };
-
 export interface LetterData {
     letter: Letter;
     color?: Color;
@@ -41,12 +37,12 @@ export interface LetterData {
     changedColorAt: number[];
 }
 
-export type GuessResults = GuessResult[];
-
 export interface GuessResult {
     guess: string;
     colors: Color[];
 }
+
+export type GuessResults = GuessResult[];
 
 export type StateOfLetters = Map<Letter, LetterData>;
 
