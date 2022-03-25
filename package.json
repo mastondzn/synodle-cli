@@ -1,6 +1,6 @@
 {
-    "name": "synopsis-bp",
-    "version": "0.0.0",
+    "name": "synodle-cli",
+    "version": "0.1",
     "type": "module",
     "engines": {
         "node": ">= 16.13 <17"
@@ -12,10 +12,10 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/MastonDZN/synopsis-bp"
+        "url": "https://github.com/MastonDZN/synodle-cli"
     },
     "bugs": {
-        "url": "https://github.com/MastonDZN/synopsis-bp/issues"
+        "url": "https://github.com/MastonDZN/synodle-cli/issues"
     },
     "license": "MIT",
     "devDependencies": {
@@ -62,10 +62,7 @@
         "node": "16.13.0"
     },
     "dependencies": {
-        "@discordjs/collection": "^0.5.0",
         "chalk": "^5.0.1",
-        "got": "^12.0.2",
-        "inquirer": "^8.2.1",
-        "puppeteer": "^13.5.1"
+        "inquirer": "^8.2.1"
     }
 }
