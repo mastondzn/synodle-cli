@@ -34,6 +34,23 @@ export type SuccessState =
 
 export interface LetterData {
     letter: Letter;
-    color?: Color | null;
-    hasColorSet: boolean;
+    color?: Color;
+    becameGreyAt?: number;
+    becameYellowAt?: number;
+    becameGreenAt?: number;
+    changedColorAt: number[];
+}
+
+export type GuessResults = GuessResult[];
+
+export interface GuessResult {
+    guess: string;
+    colors: Color[];
+}
+
+export type StateOfLetters = Map<Letter, LetterData>;
+
+export interface Answer {
+    word: string;
+    date: string;
 }
