@@ -10,7 +10,12 @@
         "sourceType": "module",
         "ecmaVersion": 2022
     },
-    "plugins": ["@typescript-eslint", "jest"],
+    "plugins": [
+        "@typescript-eslint",
+        "jest",
+        "sort-keys-fix",
+        "simple-import-sort"
+    ],
     "extends": [
         "eslint:recommended",
         "plugin:@typescript-eslint/eslint-recommended",
@@ -30,6 +35,9 @@
         "no-console": "off",
         "no-restricted-syntax": "off",
         "@typescript-eslint/lines-between-class-members": "off",
-        "@typescript-eslint/consistent-type-imports": "error"
+        "@typescript-eslint/consistent-type-imports": "warn",
+        "simple-import-sort/imports": "warn",
+        "simple-import-sort/exports": "warn",
+        "sort-keys-fix/sort-keys-fix": "warn"
     }
 }
