@@ -31,4 +31,4 @@ build/
 src/playground
 
 # user data
-data/user
+data/users.json

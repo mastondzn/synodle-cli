@@ -1,11 +1,18 @@
 import type { ChalkInstance } from 'chalk';
-import type { Color, StateOfLetters, LetterData, Letter } from './types';
+import chalk from 'chalk';
 
 import chalkHelper from './chalk';
+import type {
+    Color,
+    GuessResults,
+    Letter,
+    LetterData,
+    StateOfLetters,
+} from './types';
 
 export const letters = 'qwertyuiopasdfghjklzxcvbnm'.split('') as Letter[];
 
-export const isValidDate = (date: Date): boolean =>
+export const isValidDate = (date: unknown): boolean =>
     // eslint-disable-next-line no-restricted-globals
     date instanceof Date && !isNaN(date as unknown as number);
 
@@ -55,7 +62,7 @@ export const colorOfLetters = (guess: string, answer: string): Color[] => {
     return colors;
 };
 
-export const joinMultilineStrings = (strings: string[]): string => {
+export const joinMultilineStrings = (strings: string[], pad = 1): string => {
     if (strings.length === 0) {
         return '';
     }
@@ -69,11 +76,11 @@ export const joinMultilineStrings = (strings: string[]): string => {
     }
 
     const numberOfNewlines = strings[0].split('\n').length;
-    const everyStringHasSameNumberOfNewlines = !strings.some(
+    const hasConsistentNewlines = !strings.some(
         (string) => string.split('\n').length !== numberOfNewlines,
     );
 
-    if (!everyStringHasSameNumberOfNewlines) {
+    if (!hasConsistentNewlines) {
         throw new Error('All strings must have the same number of newlines');
     }
 
@@ -82,11 +89,13 @@ export const joinMultilineStrings = (strings: string[]): string => {
 
     for (let j = 0; j < strings.length; j += 1) {
         for (let i = 0; i < lines[0].length; i += 1) {
-            newStrings[i] = newStrings[i].concat(` ${lines[j][i]}`);
+            newStrings[i] = newStrings[i].concat(
+                `${' '.repeat(pad)}${lines[j][i]}`,
+            );
         }
     }
 
-    return newStrings.join('\n');
+    return newStrings.map((e) => e.trim()).join('\n');
 };
 
 export const generateKeyboard = (stateOfLetters: StateOfLetters): string => {
@@ -96,7 +105,10 @@ export const generateKeyboard = (stateOfLetters: StateOfLetters): string => {
         const data = stateOfLetters.get(letter) as LetterData;
         const color = data?.color;
 
-        if (color) arr.push((chalkHelper.get(color) as ChalkInstance)(letter));
+        if (color)
+            arr.push(
+                chalk.black((chalkHelper.get(color) as ChalkInstance)(letter)),
+            );
         else arr.push(letter);
     }
 
@@ -110,4 +122,41 @@ export const generateKeyboard = (stateOfLetters: StateOfLetters): string => {
             return `   ${e.trim()}`;
         })
         .join('\n');
+};
+
+export const create2DArray = <T>(
+    rows: number,
+    columns: number,
+    fill: T,
+): T[][] => {
+    const arr = Array.from({ length: rows }, () => {
+        const cols = Array.from({ length: columns }, () => fill);
+        return cols;
+    });
+    return arr;
+};
+
+export const generateTable = (guesses: GuessResults): string => {
+    const rows = create2DArray(6, 5, '?');
+
+    for (let rowPosition = 0; rowPosition < guesses.length; rowPosition += 1) {
+        for (
+            let columnPosition = 0;
+            columnPosition < guesses[rowPosition].letters.length;
+            columnPosition += 1
+        ) {
+            const chalkColor = chalkHelper.get(
+                guesses[rowPosition].colors[columnPosition],
+            ) as ChalkInstance;
+
+            const colored = chalk.black(
+                chalkColor(guesses[rowPosition].letters[columnPosition]),
+            );
+
+            rows[rowPosition][columnPosition] = colored;
+        }
+    }
+
+    const boardStr = rows.map((row) => row.join(' ')).join('\n');
+    return boardStr;
 };

@@ -1,11 +1,12 @@
 import type { ChalkInstance } from 'chalk';
 import chalk from 'chalk';
+
 import type { Color } from './types';
 
 const chalkHelper = new Map<Color, ChalkInstance>([
-    ['grey', chalk.bgGrey],
-    ['yellow', chalk.bgYellow],
-    ['green', chalk.bgGreen],
+    ['grey', chalk.bgGray],
+    ['yellow', chalk.bgYellowBright],
+    ['green', chalk.bgGreenBright],
 ]);
 
 export default chalkHelper;

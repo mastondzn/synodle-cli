@@ -1,35 +1,64 @@
-import { colorOfLetters, letters, generateKeyboard } from './helpers';
-
+import DataHandler from './utils/data';
+import {
+    colorOfLetters,
+    generateKeyboard,
+    generateTable,
+    letters,
+} from './utils/helpers';
 import type {
+    GameState,
     GuessResults,
     Letter,
     LetterData,
     StateOfLetters,
-} from './types.js';
+} from './utils/types';
+
+interface ISynodleSettings {
+    username: string;
+    answer?: string;
+    gameType?: 'daily' | 'random';
+}
 
 export default class Synodle {
     public answer: string;
+    public gameState: GameState;
     public resultOfGuesses: GuessResults;
     public stateOfLetters: StateOfLetters;
+    public data: DataHandler;
 
-    public constructor(answer: string, guesses?: string[]) {
-        if (answer.length !== 5) {
-            throw new Error('Answer is not 5 letters');
+    public constructor(settings: ISynodleSettings) {
+        this.data = new DataHandler(settings.username);
+
+        if (settings.answer && settings.gameType) {
+            throw new Error('Cannot set both answer and gameType');
         }
-        this.answer = answer;
+
+        if (settings.gameType === 'daily') {
+            this.answer = this.data.getTodaysAnswer();
+        } else if (settings.gameType === 'random') {
+            this.answer = this.data.getRandomAnswer();
+        } else if (settings.answer) {
+            if (settings.answer.length !== 5) {
+                throw new Error('Answer is not 5 letters');
+            }
+            this.answer = settings.answer;
+        } else {
+            throw new Error('No answer or gameType set');
+        }
+
         this.resultOfGuesses = [];
 
         this.stateOfLetters = new Map();
         for (const letter of letters) {
             this.stateOfLetters.set(letter, {
-                letter,
                 changedColorAt: [],
+                letter,
             });
         }
+    }
 
-        if (guesses?.length) {
-            this.addInitialGuesses(guesses);
-        }
+    public isSolved(): boolean {
+        return this.answer === this.resultOfGuesses.at(-1)?.guess;
     }
 
     public getState(): StateOfLetters {
@@ -40,13 +69,11 @@ export default class Synodle {
         return generateKeyboard(this.stateOfLetters);
     }
 
-    private addInitialGuesses(guesses: string[]): void {
-        for (const guess of guesses) {
-            this.addGuess(guess);
-        }
+    public makeTable(): string {
+        return generateTable(this.resultOfGuesses);
     }
 
-    private addGuess(guess: string): void {
+    public addGuess(guess: string): void {
         if (guess.length !== 5) {
             throw new Error('Guess is not 5 letters');
         }
@@ -57,8 +84,10 @@ export default class Synodle {
 
         const colors = colorOfLetters(guess, this.answer);
         this.resultOfGuesses.push({
-            guess,
             colors,
+            guess,
+            guessedAt: new Date().toISOString(),
+            letters: guess.split('') as Letter[],
         });
 
         for (let j = 0; j < colors.length; j += 1) {
@@ -91,5 +120,11 @@ export default class Synodle {
                     break;
             }
         }
+    }
+
+    public saveCurrentState(): void
+    {
+        if(this.gameState.)
+        this.data.currentUserData
     }
 }
