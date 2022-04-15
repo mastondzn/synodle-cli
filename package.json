@@ -17,7 +17,7 @@
     "bugs": {
         "url": "https://github.com/MastonDZN/synodle-cli/issues"
     },
-    "license": "MIT",
+    "license": "Apache-2.0",
     "devDependencies": {
         "@types/inquirer": "^8.2.0",
         "@types/jest": "^27.4.1",
