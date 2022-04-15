@@ -1,6 +1,6 @@
 {
     "name": "synodle-cli",
-    "version": "0.1",
+    "version": "0.0.1",
     "type": "module",
     "engines": {
         "node": ">= 16.13 <17"
@@ -64,6 +64,7 @@
         "format": "prettier --list-different ./**/*.{js,jsx,ts,tsx,json,md,yaml}",
         "format:fix": "prettier --write ./**/*.{js,jsx,ts,tsx,json,md,yaml}",
         "clean": "rimraf coverage build tmp",
+        "spelling": "cspell --config=.cspell.json **/*.{js,jsx,ts,tsx,md}",
         "build:watch": "tsc -w -p tsconfig.json",
         "test:watch": "jest --watch"
     },
