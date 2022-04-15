@@ -1,4 +1,4 @@
-import DataHandler from './utils/data';
+import { DataHandler } from './utils/data';
 import {
     colorOfLetters,
     generateKeyboard,
@@ -19,7 +19,7 @@ interface ISynodleSettings {
     gameType?: 'daily' | 'random';
 }
 
-export default class Synodle {
+export class Synodle {
     public answer: string;
     public gameState: GameState;
     public resultOfGuesses: GuessResults;
@@ -87,17 +87,17 @@ export default class Synodle {
             colors,
             guess,
             guessedAt: new Date().toISOString(),
-            letters: guess.split('') as Letter[],
+            letters: [...guess] as Letter[],
         });
 
-        for (let j = 0; j < colors.length; j += 1) {
+        for (const [index, color] of colors.entries()) {
             const data = this.stateOfLetters.get(
-                guess[j] as Letter,
+                guess[index] as Letter,
             ) as LetterData;
 
             data.changedColorAt.push(this.resultOfGuesses.length + 1);
 
-            switch (colors[j]) {
+            switch (color) {
                 case 'grey':
                     data.becameGreyAt = this.resultOfGuesses.length;
                     data.color = 'grey';
@@ -122,9 +122,7 @@ export default class Synodle {
         }
     }
 
-    public saveCurrentState(): void
-    {
-        if(this.gameState.)
-        this.data.currentUserData
+    isWinningGame(): boolean {
+        return this.resultOfGuesses.at(-1)?.guess === this.answer;
     }
 }

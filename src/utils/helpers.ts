@@ -1,7 +1,8 @@
+// eslint-disable-next-line unicorn/import-style
 import type { ChalkInstance } from 'chalk';
 import chalk from 'chalk';
 
-import chalkHelper from './chalk';
+import { chalkHelper } from './chalk';
 import type {
     Color,
     GuessResults,
@@ -10,10 +11,10 @@ import type {
     StateOfLetters,
 } from './types';
 
-export const letters = 'qwertyuiopasdfghjklzxcvbnm'.split('') as Letter[];
+export const letters = [...'qwertyuiopasdfghjklzxcvbnm'] as Letter[];
 
 export const isValidDate = (date: unknown): boolean =>
-    // eslint-disable-next-line no-restricted-globals
+    // eslint-disable-next-line no-restricted-globals, unicorn/prefer-number-properties
     date instanceof Date && !isNaN(date as unknown as number);
 
 export const isSameDay = (date1: Date, date2: Date): boolean => {
@@ -50,10 +51,10 @@ export const colorOfLetters = (guess: string, answer: string): Color[] => {
     }
 
     const colors: Color[] = [];
-    for (let i = 0; i < guess.length; i += 1) {
-        if (guess[i] === answer[i]) {
+    for (const [index, element] of [...guess].entries()) {
+        if (element === answer[index]) {
             colors.push('green');
-        } else if (answer.includes(guess[i])) {
+        } else if (answer.includes(element)) {
             colors.push('yellow');
         } else {
             colors.push('grey');
@@ -85,41 +86,44 @@ export const joinMultilineStrings = (strings: string[], pad = 1): string => {
     }
 
     const lines = strings.map((s) => s.split('\n'));
-    const newStrings: string[] = Array(numberOfNewlines).fill('');
+    const newStrings: string[] = Array.from(
+        { length: numberOfNewlines },
+        () => '',
+    );
 
-    for (let j = 0; j < strings.length; j += 1) {
-        for (let i = 0; i < lines[0].length; i += 1) {
-            newStrings[i] = newStrings[i].concat(
-                `${' '.repeat(pad)}${lines[j][i]}`,
-            );
+    for (let index = 0; index < strings.length; index += 1) {
+        for (let index_ = 0; index_ < lines[0].length; index_ += 1) {
+            newStrings[index_] = `${newStrings[index_]}${' '.repeat(pad)}${
+                lines[index][index_]
+            }`;
         }
     }
 
-    return newStrings.map((e) => e.trim()).join('\n');
+    return newStrings.map((element) => element.trim()).join('\n');
 };
 
 export const generateKeyboard = (stateOfLetters: StateOfLetters): string => {
-    const arr: string[] = [];
+    const array: string[] = [];
 
     for (const letter of letters) {
         const data = stateOfLetters.get(letter) as LetterData;
         const color = data?.color;
 
         if (color)
-            arr.push(
+            array.push(
                 chalk.black((chalkHelper.get(color) as ChalkInstance)(letter)),
             );
-        else arr.push(letter);
+        else array.push(letter);
     }
 
-    return arr
+    return array
         .join(' ')
         .replace(/(?<=p)|(?<=l)/g, '\n')
         .split('\n')
-        .map((e, _i, a) => {
-            if (a.indexOf(e) === 0) return e.trim();
-            if (a.indexOf(e) === 1) return ` ${e.trim()}`;
-            return `   ${e.trim()}`;
+        .map((element, _index, a) => {
+            if (a.indexOf(element) === 0) return `${element.trim()} `;
+            if (a.indexOf(element) === 1) return ` ${element.trim()} `;
+            return `  ${element.trim()} `;
         })
         .join('\n');
 };
@@ -129,34 +133,42 @@ export const create2DArray = <T>(
     columns: number,
     fill: T,
 ): T[][] => {
-    const arr = Array.from({ length: rows }, () => {
+    const array = Array.from({ length: rows }, () => {
         const cols = Array.from({ length: columns }, () => fill);
         return cols;
     });
-    return arr;
+    return array;
 };
 
 export const generateTable = (guesses: GuessResults): string => {
     const rows = create2DArray(6, 5, '?');
 
-    for (let rowPosition = 0; rowPosition < guesses.length; rowPosition += 1) {
+    for (const [rowPosition, guess] of guesses.entries()) {
         for (
             let columnPosition = 0;
-            columnPosition < guesses[rowPosition].letters.length;
+            columnPosition < guess.letters.length;
             columnPosition += 1
         ) {
             const chalkColor = chalkHelper.get(
-                guesses[rowPosition].colors[columnPosition],
+                guess.colors[columnPosition],
             ) as ChalkInstance;
 
             const colored = chalk.black(
-                chalkColor(guesses[rowPosition].letters[columnPosition]),
+                chalkColor(guess.letters[columnPosition]),
             );
 
             rows[rowPosition][columnPosition] = colored;
         }
     }
 
-    const boardStr = rows.map((row) => row.join(' ')).join('\n');
-    return boardStr;
+    const boardString = rows.map((row) => row.join(' ')).join('\n');
+    return boardString;
+};
+
+export const guessValidator = (value: string) => {
+    if (value.length !== 5) {
+        return `Guess is not 5 letters (${value.length} letters)`;
+    }
+
+    return true;
 };

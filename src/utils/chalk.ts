@@ -1,3 +1,4 @@
+// eslint-disable-next-line unicorn/import-style
 import type { ChalkInstance } from 'chalk';
 import chalk from 'chalk';
 
@@ -9,4 +10,4 @@ const chalkHelper = new Map<Color, ChalkInstance>([
     ['green', chalk.bgGreenBright],
 ]);
 
-export default chalkHelper;
+export { chalkHelper };
